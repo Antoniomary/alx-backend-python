@@ -8,7 +8,7 @@ T = TypeVar('T')
 
 def safely_get_value(dct: Mapping,
                      key: Any,
-                     default: Optional[Any] = None) -> Optional[Any]:
+                     default: Optional[T] = None) -> Optional[T]:
     """a function that returns the value of a key in a dictionary if key is
        present else returns the value in default which defaults to None
     """
