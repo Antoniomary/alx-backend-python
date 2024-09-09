@@ -35,6 +35,16 @@ class TestGithubOrgClient(unittest.TestCase):
         mock_get.assert_called_with('https://api.github.com/orgs/' + org_name)
         mock_get.assert_called_once()
 
+    def test_public_repos_url(self):
+        """tests the result of _public_repos_url
+        """
+        with patch('utils.requests.get') as mock_get:
+            mock_get.return_value.json.return_value = {"test": "mock"}
+
+            obj = GithubOrgClient("test")
+            result = obj.org["test"]
+            assert result == "mock"
+
 
 if __name__ == "__main__":
     unittest.main()
