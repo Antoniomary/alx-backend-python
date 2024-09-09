@@ -7,7 +7,7 @@ from client import (
 )
 from parameterized import parameterized
 from typing import Dict
-from unittest.mock import patch, PropertyMock
+from unittest.mock import patch, PropertyMock, MagicMock
 import unittest
 import utils
 
@@ -47,7 +47,7 @@ class TestGithubOrgClient(unittest.TestCase):
             assert result == "mock"
 
     @patch("client.get_json")
-    def test_public_repos(self, mock_get_json):
+    def test_public_repos(self, mock_get_json: MagicMock):
         """tests the result of GithubOrgClient.public_repos
         """
         test_payload = {
