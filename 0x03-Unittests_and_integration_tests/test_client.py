@@ -6,7 +6,7 @@ from client import (
         GithubOrgClient
 )
 from parameterized import parameterized
-from unittest.mock import patch
+from unittest.mock import patch, PropertyMock
 import unittest
 import utils
 
@@ -44,6 +44,37 @@ class TestGithubOrgClient(unittest.TestCase):
             obj = GithubOrgClient("test")
             result = obj.org["test"]
             assert result == "mock"
+
+    @patch("client.get_json")
+    def test_public_repos(self, mock_get_json):
+        """tests the result of GithubOrgClient.public_repos
+        """
+        test_payload = {
+            'repos_url': 'https://api.github.com/orgs/biz',
+            'repos': [
+                {
+                    'id': 1,
+                    'name': 'repo one',
+                },
+                {
+                    'id': 2,
+                    'name': 'repo two',
+                },
+            ]
+        }
+
+        mock_get_json.return_value = test_payload['repos']
+
+        with patch('client.GithubOrgClient._public_repos_url',
+                   new_callable=PropertyMock) as mock_repos:
+            mock_repos.return_value = test_payload["repos"]
+            obj = GithubOrgClient('biz')
+            result = obj.public_repos()
+            assert result == ['repo one', 'repo two']
+
+            mock_repos.assert_called_once()
+
+        mock_get_json.assert_called_once()
 
 
 if __name__ == "__main__":
